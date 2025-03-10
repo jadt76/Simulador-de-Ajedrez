@@ -1,0 +1,15 @@
+Componentes Principales del Diagrama de Clases
+Clases:
+
+Pieza: Clase base abstracta.
+Rey, Reina, Torre, Alfil, Caballo, Peon: Clases derivadas de Pieza.
+Tablero: Clase que representa el tablero de ajedrez.
+Validador: Clase utilitaria para validaciones.
+BubbleSort, SelectionSort, InsertionSort, MergeSort: Clases para los algoritmos de ordenamiento.
+ChessSimulator: Clase que maneja la lógica del simulador.
+Main: Punto de entrada del programa.
+Relaciones:
+
+Herencia: Rey, Reina, Torre, Alfil, Caballo, Peon heredan de Pieza.
+Asociación: ChessSimulator utiliza Tablero, Validador, y las clases de algoritmos de ordenamiento.
+Agregación: Tablero contiene múltiples instancias de Pieza.

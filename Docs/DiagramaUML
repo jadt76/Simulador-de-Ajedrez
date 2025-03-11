@@ -1,0 +1,23 @@
+Clase Pieza:
+
+Atributos: color, posicion
+Métodos: mover(), capturar(), tipoPieza(), getColor(), setColor(), getPosicion(), setPosicion()
+Clases Derivadas (Rey, Reina, Torre, Alfil, Caballo, Peon):
+
+Cada una hereda de Pieza y puede sobrescribir los métodos mover() y capturar().
+Clase Tablero:
+
+Atributos: casillas (matriz de Pieza)
+Métodos: colocarPieza(), visualizarTablero(), limpiarTablero()
+Clase Validador:
+
+Métodos estáticos: esPosicionValida(), esMovimientoValido()
+Clases de Algoritmos de Ordenamiento (BubbleSort, SelectionSort, InsertionSort, MergeSort):
+
+Cada una tiene un método ordenar().
+Clase ChessSimulator:
+
+Métodos: ejecutar(), seleccionarAlgoritmo()
+Clase Main:
+
+Método main() que inicia el simulador.

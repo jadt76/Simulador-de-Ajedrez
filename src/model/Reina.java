@@ -1,7 +1,9 @@
 package model;
 
+import util.Tablero;
+
 public class Reina extends Pieza {
-    public Reina(String color, String posicion) {
+    public Reina(Tablero.Color color, String posicion) {
         super(color, posicion);
     }
 
@@ -28,7 +30,7 @@ public class Reina extends Pieza {
     }
 
     @Override
-    public String tipoPieza() {
-        return "Reina";
+    public Tablero.TipoPieza tipoPieza() {
+        return Tablero.TipoPieza.Reina;
     }
 }

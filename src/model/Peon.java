@@ -1,7 +1,9 @@
 package model;
 
+import util.Tablero;
+
 public class Peon extends Pieza {
-    public Peon(String color, String posicion) {
+    public Peon(Tablero.Color color, String posicion) {
         super(color, posicion);
     }
 
@@ -34,7 +36,7 @@ public class Peon extends Pieza {
     }
 
     @Override
-    public String tipoPieza() {
-        return "Peón";
+    public Tablero.TipoPieza tipoPieza() {
+        return Tablero.TipoPieza.Peon;
     }
 }

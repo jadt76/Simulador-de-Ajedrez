@@ -1,7 +1,9 @@
 package model;
 
+import util.Tablero;
+
 public class Alfil extends Pieza {
-    public Alfil(String color, String posicion) {
+    public Alfil(Tablero.Color color, String posicion) {
         super(color, posicion);
     }
 
@@ -28,7 +30,7 @@ public class Alfil extends Pieza {
     }
 
     @Override
-    public String tipoPieza() {
-        return "Alfil";
+    public Tablero.TipoPieza tipoPieza() {
+        return Tablero.TipoPieza.Alfil;
     }
 }

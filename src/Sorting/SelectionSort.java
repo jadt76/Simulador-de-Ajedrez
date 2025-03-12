@@ -7,30 +7,28 @@ import util.Tablero.AlgoritmoOrdenamiento;
 import java.util.List;
 
 public class SelectionSort implements AlgoritmoOrdenamiento {
-
     public void ordenar(List<Pieza> piezas, Tablero tablero) {
         long startTime = System.nanoTime();
         int n = piezas.size();
+        Pieza[] arrayPiezas = piezas.toArray(new Pieza[0]);
 
         for (int i = 0; i < n - 1; i++) {
-            // Encontrar el índice del elemento mínimo en la lista no ordenada
-            int indiceMinimo = i;
+            int minIndex = i;
             for (int j = i + 1; j < n; j++) {
-                if (compararPiezas(piezas.get(j), piezas.get(indiceMinimo)) < 0) {
-                    indiceMinimo = j;
+                if (compararPiezas(arrayPiezas[j], arrayPiezas[minIndex]) < 0) {
+                    minIndex = j;
                 }
             }
+            intercambiar(arrayPiezas, i, minIndex);
 
-            // Intercambiar el elemento mínimo encontrado con el primer elemento no ordenado
-            Pieza temp = piezas.get(indiceMinimo);
-            piezas.set(indiceMinimo, piezas.get(i));
-            piezas.set(i, temp);
-
-            // Actualizar el tablero con las nuevas posiciones de las piezas
-            tablero.actualizarPosicionesEnTablero(piezas, tablero);
-
-            // Visualizar el tablero después de cada intercambio
+            // Actualizar el tablero después de cada intercambio
+            actualizarTablero(arrayPiezas, tablero);
             tablero.visualizarTablero();
+        }
+
+        // Actualizar la lista original con el array ordenado
+        for (int i = 0; i < arrayPiezas.length; i++) {
+            piezas.set(i, arrayPiezas[i]);
         }
 
         long endTime = System.nanoTime();
@@ -38,8 +36,13 @@ public class SelectionSort implements AlgoritmoOrdenamiento {
         System.out.println("Tiempo de ordenamiento: " + duration + " nanosegundos");
     }
 
+    private static void intercambiar(Pieza[] arrayPiezas, int i, int j) {
+        Pieza temp = arrayPiezas[i];
+        arrayPiezas[i] = arrayPiezas[j];
+        arrayPiezas[j] = temp;
+    }
+
     private static int compararPiezas(Pieza p1, Pieza p2) {
-        // Definir el orden de las piezas según las reglas del ajedrez
         String[] ordenPiezas = {"Rey", "Reina", "Torre", "Alfil", "Caballo", "Peón"};
 
         int indiceP1 = -1;
@@ -57,19 +60,14 @@ public class SelectionSort implements AlgoritmoOrdenamiento {
         return Integer.compare(indiceP1, indiceP2);
     }
 
-    private static void actualizarTablero(List<Pieza> piezas, Tablero tablero) {
+    private static void actualizarTablero(Pieza[] arrayPiezas, Tablero tablero) {
         // Limpiar el tablero
-        for (int fila = 0; fila < 8; fila++) {
-            for (int columna = 0; columna < 8; columna++) {
-                tablero.getCasillas()[fila][columna] = null;
-            }
-        }
+        tablero.getCasillas().clear();
 
         // Colocar las piezas en el tablero según su posición actual
-        for (Pieza pieza : piezas) {
-            int fila = 8 - Integer.parseInt(pieza.getPosicion().substring(1));
-            int columna = pieza.getPosicion().charAt(0) - 'a';
-            tablero.getCasillas()[fila][columna] = pieza;
+        for (Pieza pieza : arrayPiezas) {
+            String posicion = pieza.getPosicion();
+            tablero.getCasillas().put(posicion, pieza);
         }
     }
 }

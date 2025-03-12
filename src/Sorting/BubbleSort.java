@@ -22,7 +22,8 @@ public class BubbleSort implements AlgoritmoOrdenamiento {
                     piezas.set(i, temp);
                     swapped = true;
 
-                    tablero.actualizarPosicionesEnTablero(piezas, tablero);
+                    // Actualizar el tablero después de cada intercambio
+                    actualizarTablero(piezas, tablero);
                     tablero.visualizarTablero();
                 }
             }
@@ -53,5 +54,15 @@ public class BubbleSort implements AlgoritmoOrdenamiento {
         }
 
         return Integer.compare(indiceP1, indiceP2);
+    }
+    private static void actualizarTablero(List<Pieza> piezas, Tablero tablero) {
+        // Limpiar el tablero
+        tablero.getCasillas().clear();
+
+        // Colocar las piezas en el tablero según su posición actual
+        for (Pieza pieza : piezas) {
+            String posicion = pieza.getPosicion();
+            tablero.getCasillas().put(posicion, pieza);
+        }
     }
 }

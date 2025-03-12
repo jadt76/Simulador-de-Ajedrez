@@ -1,15 +1,99 @@
 Componentes Principales del Diagrama de Clases
-Clases:
 
-Pieza: Clase base abstracta.
-Rey, Reina, Torre, Alfil, Caballo, Peon: Clases derivadas de Pieza.
-Tablero: Clase que representa el tablero de ajedrez.
-Validador: Clase utilitaria para validaciones.
-BubbleSort, SelectionSort, InsertionSort, MergeSort: Clases para los algoritmos de ordenamiento.
-ChessSimulator: Clase que maneja la lógica del simulador.
-Main: Punto de entrada del programa.
-Relaciones:
+classDiagram
+    class Pieza {
+        <<abstract>>
+        +String color
+        +String posicion
+        +mover()
+        +capturar()
+        +tipoPieza()
+        +getColor()
+        +setColor()
+        +getPosicion()
+        +setPosicion()
+    }
 
-Herencia: Rey, Reina, Torre, Alfil, Caballo, Peon heredan de Pieza.
-Asociación: ChessSimulator utiliza Tablero, Validador, y las clases de algoritmos de ordenamiento.
-Agregación: Tablero contiene múltiples instancias de Pieza.
+    class Rey {
+        +mover()
+        +capturar()
+    }
+
+    class Reina {
+        +mover()
+        +capturar()
+    }
+
+    class Torre {
+        +mover()
+        +capturar()
+    }
+
+    class Alfil {
+        +mover()
+        +capturar()
+    }
+
+    class Caballo {
+        +mover()
+        +capturar()
+    }
+
+    class Peon {
+        +mover()
+        +capturar()
+    }
+
+    class Tablero {
+        +Map<String, Pieza> casillas
+        +List<Pieza> piezas
+        +colocarPieza(Pieza pieza, String posicion)
+        +visualizarTablero()
+        +limpiarTablero()
+    }
+
+    class Validador {
+        +static esPosicionValida()
+        +static esMovimientoValido()
+    }
+
+    class BubbleSort {
+        +ordenar(List<Pieza> piezas, Tablero tablero)
+    }
+
+    class SelectionSort {
+        +ordenar(List<Pieza> piezas, Tablero tablero)
+    }
+
+    class InsertionSort {
+        +ordenar(List<Pieza> piezas, Tablero tablero)
+    }
+
+    class MergeSort {
+        +ordenar(List<Pieza> piezas, Tablero tablero)
+    }
+
+    class ChessSimulator {
+        +ejecutar()
+        +seleccionarAlgoritmo()
+    }
+
+    class Main {
+        +main()
+    }
+
+    Pieza <|-- Rey
+    Pieza <|-- Reina
+    Pieza <|-- Torre
+    Pieza <|-- Alfil
+    Pieza <|-- Caballo
+    Pieza <|-- Peon
+
+    ChessSimulator --> Tablero
+    ChessSimulator --> Validador
+    ChessSimulator --> BubbleSort
+    ChessSimulator --> SelectionSort
+    ChessSimulator --> InsertionSort
+    ChessSimulator --> MergeSort
+
+    Tablero o-- Pieza

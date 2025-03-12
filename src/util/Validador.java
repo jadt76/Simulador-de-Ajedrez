@@ -2,6 +2,11 @@ package util;
 
 import model.Pieza;
 
+/**
+ * Clase para validar posiciones y movimientos de piezas de ajedrez
+ * Esta clase contiene métodos estáticos para validar si una posición es válida
+ * y si un movimiento es válido para una pieza de ajedrez.
+ */
 public class Validador {
 
     public static boolean esPosicionValida(String posicion) {
@@ -19,22 +24,18 @@ public class Validador {
             return false;
         }
         // Lógica específica para cada tipo de pieza
+        pieza.tipoPieza();
         switch (pieza.tipoPieza()) {
-            case "Rey":
-                return validarMovimientoRey(pieza, nuevaPosicion);
-            case "Reina":
-                return validarMovimientoReina(pieza, nuevaPosicion);
-            case "Torre":
-                return validarMovimientoTorre(pieza, nuevaPosicion);
-            case "Alfil":
-                return validarMovimientoAlfil(pieza, nuevaPosicion);
-            case "Caballo":
-                return validarMovimientoCaballo(pieza, nuevaPosicion);
-            case "Peón":
-                return validarMovimientoPeon(pieza, nuevaPosicion);
-            default:
-                return false;
+            case Rey -> validarMovimientoRey(pieza, nuevaPosicion);
+            case Reina -> validarMovimientoReina(pieza, nuevaPosicion);
+            case Torre -> validarMovimientoTorre(pieza, nuevaPosicion);
+            case Alfil -> validarMovimientoAlfil(pieza, nuevaPosicion);
+            case Caballo -> validarMovimientoCaballo(pieza, nuevaPosicion);
+            case Peon -> validarMovimientoPeon(pieza, nuevaPosicion);
+            default -> {
+            }
         }
+        return false;
     }
 
     private static boolean validarMovimientoRey(Pieza pieza, String nuevaPosicion) {
@@ -100,9 +101,7 @@ public class Validador {
             }
         }
         // Captura en diagonal
-        else if (Math.abs(columnaNueva - columnaActual) == 1 && filaNueva == filaActual + direccion) {
-            return true;
-        }
+        else return Math.abs(columnaNueva - columnaActual) == 1 && filaNueva == filaActual + direccion;
         return false;
     }
 }

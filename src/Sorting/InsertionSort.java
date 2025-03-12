@@ -22,7 +22,7 @@ public class InsertionSort implements AlgoritmoOrdenamiento {
             }
             piezas.set(j + 1, clave);
 
-            tablero.actualizarPosicionesEnTablero(piezas, tablero);
+            actualizarTablero(piezas, tablero);
             tablero.visualizarTablero();
         }
 
@@ -49,20 +49,14 @@ public class InsertionSort implements AlgoritmoOrdenamiento {
 
         return Integer.compare(indiceP1, indiceP2);
     }
-/*
     private static void actualizarTablero(List<Pieza> piezas, Tablero tablero) {
         // Limpiar el tablero
-        for (int fila = 0; fila < 8; fila++) {
-            for (int columna = 0; columna < 8; columna++) {
-                tablero.getCasillas()[fila][columna] = null;
-            }
-        }
+        tablero.getCasillas().clear();
 
         // Colocar las piezas en el tablero según su posición actual
         for (Pieza pieza : piezas) {
-            int fila = 8 - Integer.parseInt(pieza.getPosicion().substring(1));
-            int columna = pieza.getPosicion().charAt(0) - 'a';
-            tablero.getCasillas()[fila][columna] = pieza;
+            String posicion = pieza.getPosicion();
+            tablero.getCasillas().put(posicion, pieza);
         }
-    }*/
+    }
 }

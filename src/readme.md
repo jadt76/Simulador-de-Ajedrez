@@ -1,6 +1,7 @@
 # Simulador de Ajedrez Ordenado
 
-Este proyecto es un simulador de ajedrez en Java que permite a los usuarios configurar un tablero de ajedrez con piezas en posiciones aleatorias y ordenar las piezas utilizando diferentes algoritmos de ordenamiento. El objetivo es visualizar cómo las piezas se mueven y se ordenan en el tablero según las reglas del ajedrez.
+Este proyecto es un simulador de ajedrez en Java que permite a los usuarios configurar un tablero de ajedrez con piezas en posiciones aleatorias y ordenar las piezas utilizando diferentes algoritmos de ordenamiento. 
+El objetivo es visualizar cómo las piezas se mueven y se ordenan en el tablero según las reglas del ajedrez.
 
 ## Características
 
@@ -28,23 +29,27 @@ Este proyecto es un simulador de ajedrez en Java que permite a los usuarios conf
    git clone <URL_DEL_REPOSITORIO>
    cd SimuladorDeAjedrez
 
-Compilar el Proyecto:
+2. Compilar el Proyecto:
 
 Abre el proyecto en tu IDE preferido.
 Compila el proyecto utilizando las herramientas de construcción de tu IDE.
-Ejecutar el Simulador:
+
+3. Ejecutar el Simulador:
 
 Ejecuta la clase Main para iniciar el simulador.
 Sigue las instrucciones en la consola para configurar las piezas y seleccionar el algoritmo de ordenamiento.
-Visualizar el Tablero:
+
+4. Visualizar el Tablero:
 
 El tablero se mostrará en la consola con las piezas en sus posiciones iniciales aleatorias.
 Observa cómo las piezas se ordenan paso a paso según el algoritmo seleccionado.
 
-Documentación
+5. Documentación
+
 La documentación del código incluye comentarios en las clases y métodos principales.
 Los diagramas de clases UML se encuentran en el directorio docs/.
-Contribución
+
+6. Contribución
 Las contribuciones son bienvenidas. Por favor, abre un issue o envía un pull request con tus mejoras o correcciones.
 
 Licencia

@@ -6,12 +6,14 @@ import util.Tablero;
 import util.Tablero.AlgoritmoOrdenamiento;
 import util.Validador;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Random;
 
+/**
+ * Clase principal que simula un juego de ajedrez en consola.
+ * Esta clase es la encargada de mostrar un menú de opciones al usuario y ejecutar las acciones correspondientes.
+ */
 public class ChessSimulator {
     // Constantes para las opciones del menú
     private static final int OPCION_CONFIGURAR_PIEZAS = 1;
@@ -20,28 +22,23 @@ public class ChessSimulator {
     private static final int OPCION_MOVER_PIEZA = 4;
     private static final int OPCION_SALIR = 5;
 
-    private final List<Pieza> piezas;
-    private Tablero tablero;
+    private final Tablero tablero;
 
+    /**
+     * Constructor de la clase ChessSimulator.
+     */
     public ChessSimulator() {
-        piezas = new ArrayList<>();
-        tablero = new Tablero();
-        // Inicializar el tablero con las piezas en sus posiciones iniciales
-        inicializarTablero();
+        tablero = new Tablero(); //Inicializar el tablero
+        inicializarTablero();  //Colocar las piezas en sus posiciones iniciales
     }
+
     public void ejecutar() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Bienvenido al simulador de ajedrez en consola.");
 
         while (true) {
             try {
-                System.out.println("\nSeleccione una opción:");
-                System.out.println(OPCION_CONFIGURAR_PIEZAS + ". Configurar piezas en el tablero");
-                System.out.println(OPCION_SELECCIONAR_ALGORITMO + ". Seleccionar algoritmo de ordenamiento");
-                System.out.println(OPCION_VISUALIZAR_TABLERO + ". Visualizar tablero");
-                System.out.println(OPCION_MOVER_PIEZA + ". Mover una pieza");
-                System.out.println(OPCION_SALIR + ". Salir");
-
+                mostrarMenu();
                 int opcion = scanner.nextInt();
                 scanner.nextLine();
 
@@ -73,116 +70,14 @@ public class ChessSimulator {
             }
         }
     }
-    // Método para mover una pieza en el tablero
-    private void moverPieza(Scanner scanner) {
-        System.out.println("Ingrese el movimiento:");
-        String movimiento = scanner.nextLine();
-
-        // Validar el formato del movimiento
-        if (!movimiento.matches("[a-h][1-8]-[a-h][1-8]")) {
-            System.out.println("Formato de movimiento no válido. Ingrese dos posiciones separadas por un guion.");
-            return;
-        }
-
-        // Obtener las posiciones de origen y destino
-        String[] partes = movimiento.split("-");
-        if (partes.length != 2) {
-            System.out.println("Formato de movimiento no válido. Ingrese dos posiciones separadas por un guion.");
-            return;
-        }
-        String origen = partes[0];
-        String destino = partes[1];
-
-        // Buscar la pieza en la posición de origen
-        Pieza pieza = obtenerPiezaEnPosicion(origen);
-        if (pieza == null) {
-            System.out.println("No hay ninguna pieza en la posición de origen.");
-            return;
-        }
-
-        // Validar el movimiento usando el Validador
-        if (!Validador.esMovimientoValido(pieza, destino)) {
-            System.out.println("Movimiento no válido para la pieza seleccionada.");
-            return;
-        }
-
-        // Mover la pieza
-        if (pieza.mover(destino)) {
-            // Actualizar el tablero
-            int filaOrigen = 8 - Integer.parseInt(origen.substring(1));
-            int columnaOrigen = origen.charAt(0) - 'a';
-            int filaDestino = 8 - Integer.parseInt(destino.substring(1));
-            int columnaDestino = destino.charAt(0) - 'a';
-
-            tablero.getCasillas()[filaOrigen][columnaOrigen] = null;
-            tablero.getCasillas()[filaDestino][columnaDestino] = pieza;
-
-            System.out.println("Movimiento realizado con éxito.");
-            tablero.visualizarTablero();
-        } else {
-            System.out.println("No se pudo mover la pieza.");
-            System.out.println("Movimientos válidos para " + pieza.tipoPieza() + " en " + origen + ":");
-            mostrarMovimientosValidos(pieza, origen);
-        }
-    }
-    // Método para obtener la pieza en una posición específica
-    private Pieza obtenerPiezaEnPosicion(String posicion) {
-        int fila = 8 - Integer.parseInt(posicion.substring(1));
-        int columna = posicion.charAt(0) - 'a';
-        return tablero.getCasillas()[fila][columna];
-    }
-    // Método para mostrar movimientos válidos para una pieza
-    private void mostrarMovimientosValidos(Pieza pieza, String posicionActual) {
-        int filaActual = 8 - Integer.parseInt(posicionActual.substring(1));
-        int columnaActual = posicionActual.charAt(0) - 'a';
-
-        for (int fila = 0; fila < 8; fila++) {
-            for (int columna = 0; columna < 8; columna++) {
-                String nuevaPosicion = (char) ('a' + columna) + String.valueOf(8 - fila);
-                if (Validador.esMovimientoValido(pieza, nuevaPosicion)) {
-                    System.out.println("- " + nuevaPosicion);
-                }
-            }
-        }
-    }
-
-    // Método para inicializar el tablero con las piezas en sus posiciones iniciales
-    private void inicializarTablero() {
-        // Limpiar el tablero y la lista de piezas
-        piezas.clear();
-        tablero = new Tablero();
-
-        // Colocar piezas blancas
-        colocarPiezasIniciales("blanco", 0, 1);
-        // Colocar piezas negras
-        colocarPiezasIniciales("negro", 7, 6);
-    }
-    // Método auxiliar para colocar piezas en sus posiciones iniciales
-    private void colocarPiezasIniciales(String color, int filaPiezas, int filaPeones) {
-        // Colocar torres
-        piezas.add(new Torre(color, "a" + (8 - filaPiezas)));
-        piezas.add(new Torre(color, "h" + (8 - filaPiezas)));
-        // Colocar caballos
-        piezas.add(new Caballo(color, "b" + (8 - filaPiezas)));
-        piezas.add(new Caballo(color, "g" + (8 - filaPiezas)));
-        // Colocar alfiles
-        piezas.add(new Alfil(color, "c" + (8 - filaPiezas)));
-        piezas.add(new Alfil(color, "f" + (8 - filaPiezas)));
-        // Colocar reina
-        piezas.add(new Reina(color, "d" + (8 - filaPiezas)));
-        // Colocar rey
-        piezas.add(new Rey(color, "e" + (8 - filaPiezas)));
-        // Colocar peones
-        for (char col = 'a'; col <= 'h'; col++) {
-            piezas.add(new Peon(color, col + String.valueOf(8 - filaPeones)));
-        }
-
-        // Colocar las piezas en el tablero
-        for (Pieza pieza : piezas) {
-            int fila = 8 - Integer.parseInt(pieza.getPosicion().substring(1));
-            int columna = pieza.getPosicion().charAt(0) - 'a';
-            tablero.getCasillas()[fila][columna] = pieza;
-        }
+    // Método para mostrar el menú
+    private void mostrarMenu() {
+        System.out.println("\nSeleccione una opción:");
+        System.out.println(OPCION_CONFIGURAR_PIEZAS + ". Configurar piezas en el tablero");
+        System.out.println(OPCION_SELECCIONAR_ALGORITMO + ". Seleccionar algoritmo de ordenamiento");
+        System.out.println(OPCION_VISUALIZAR_TABLERO + ". Visualizar tablero");
+        System.out.println(OPCION_MOVER_PIEZA + ". Mover una pieza");
+        System.out.println(OPCION_SALIR + ". Salir");
     }
 
     // Método para configurar piezas en el tablero
@@ -196,10 +91,10 @@ public class ChessSimulator {
             scanner.nextLine();
 
             if (opcionColor < 1 || opcionColor > 2) {
-                System.out.print("Error: Opcion no valida. Seleccione 1 para blancas o 2 para negras.");
+                System.out.println("Error: Opción no válida. Seleccione 1 para blancas o 2 para negras.");
                 return;
             }
-            String color = (opcionColor == 1) ? "blanco" : "negro";
+            Tablero.Color color = (opcionColor == 1) ? Tablero.Color.BLANCO : Tablero.Color.NEGRO;
 
             System.out.println("Seleccione las piezas a colocar en el tablero:");
             System.out.println("1. Rey");
@@ -214,37 +109,37 @@ public class ChessSimulator {
             scanner.nextLine();
 
             if (opcionPieza < 1 || opcionPieza > 7) {
-                System.out.println("Error: Opcion no valida. Seleccione entre 1 y 7.");
+                System.out.println("Error: Opción no válida. Seleccione entre 1 y 7.");
                 return;
             }
-            limpiarTablero();
+
+            tablero.limpiarTablero();
             Random random = new Random();
 
             switch (opcionPieza) {
                 case 1:
-                    agregarPieza(color, "Rey", 1, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Rey, 1, random);
+                    break;
                 case 2:
-                    agregarPieza(color, "Reina", 1, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Reina, 1, random);
+                    break;
                 case 3:
-                    agregarPieza(color, "Torre", 2, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Torre, 2, random);
+                    break;
                 case 4:
-                    agregarPieza(color, "Alfil", 2, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Alfil, 2, random);
+                    break;
                 case 5:
-                    agregarPieza(color, "Caballo", 2, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Caballo, 2, random);
+                    break;
                 case 6:
-                    agregarPieza(color, "Peón", 8, random);
-                break;
+                    agregarPieza(color, Tablero.TipoPieza.Peon, 8, random);
+                    break;
                 case 7:
                     inicializarPiezas(color, random);
-                break;
+                    break;
             }
 
-            // Visualizar el tablero inicial
             tablero.visualizarTablero();
         } catch (InputMismatchException e) {
             System.out.println("Error: Por favor, ingrese un número entero.");
@@ -254,71 +149,116 @@ public class ChessSimulator {
             scanner.nextLine();
         }
     }
-    //Método para limpiar el tablero
-    private void limpiarTablero() {
-        piezas.clear();
-        tablero = new Tablero();
+
+    // Método para mover una pieza
+    private void moverPieza(Scanner scanner) {
+        System.out.println("Ingrese el movimiento (ejemplo: a2-a4):");
+        String movimiento = scanner.nextLine();
+
+        if (!movimiento.matches("[a-h][1-8]-[a-h][1-8]")) {
+            System.out.println("Formato de movimiento no válido. Ingrese dos posiciones separadas por un guion.");
+            return;
+        }
+
+        String[] partes = movimiento.split("-");
+        String origen = partes[0];
+        String destino = partes[1];
+
+        Pieza pieza = tablero.obtenerPiezaEnPosicion(origen);
+        if (pieza == null) {
+            System.out.println("No hay ninguna pieza en la posición de origen.");
+            return;
+        }
+
+        if (!Validador.esMovimientoValido(pieza, destino)) {
+            System.out.println("Movimiento no válido para la pieza seleccionada.");
+            return;
+        }
+        pieza.mover(destino);
+        tablero.colocarPieza(pieza, destino);
+        System.out.println("Movimiento realizado con éxito.");
+        tablero.visualizarTablero();
     }
 
-    // Método auxiliar para agregar una pieza al tablero
-    private void agregarPieza(String color, String tipo, int cantidad, Random random) {
-        for (int i = 0; i < cantidad; i++) {
-            Pieza pieza = crearPieza(color, tipo, generarPosicionAleatoria(random));
-            colocarPiezaEnPosicionValida(pieza, random);
-            piezas.add(pieza);
+    private void inicializarTablero() {
+        // Colocar piezas blancas
+        colocarPiezasIniciales(Tablero.Color.BLANCO, 0, 1);
+        // Colocar piezas negras
+        colocarPiezasIniciales(Tablero.Color.NEGRO, 7, 6);
+    }
+    private void colocarPiezasIniciales(Tablero.Color color, int filaPiezas, int filaPeones) {
+        // Colocar torres
+        tablero.colocarPieza(new Torre(color, "a" + (8 - filaPiezas)), "a" + (8 - filaPiezas));
+        tablero.colocarPieza(new Torre(color, "h" + (8 - filaPiezas)), "h" + (8 - filaPiezas));
+        // Colocar caballos
+        tablero.colocarPieza(new Caballo(color, "b" + (8 - filaPiezas)), "b" + (8 - filaPiezas));
+        tablero.colocarPieza(new Caballo(color, "g" + (8 - filaPiezas)), "g" + (8 - filaPiezas));
+        // Colocar alfiles
+        tablero.colocarPieza(new Alfil(color, "c" + (8 - filaPiezas)), "c" + (8 - filaPiezas));
+        tablero.colocarPieza(new Alfil(color, "f" + (8 - filaPiezas)), "f" + (8 - filaPiezas));
+        // Colocar reina
+        tablero.colocarPieza(new Reina(color, "d" + (8 - filaPiezas)), "d" + (8 - filaPiezas));
+        // Colocar rey
+        tablero.colocarPieza(new Rey(color, "e" + (8 - filaPiezas)), "e" + (8 - filaPiezas));
+        // Colocar peones
+        for (char col = 'a'; col <= 'h'; col++) {
+            String posicion = col + String.valueOf(8 - filaPeones);
+            tablero.colocarPieza(new Peon(color, posicion), posicion);
         }
     }
 
-    // Método auxiliar para crear una pieza según el tipo
-    private Pieza crearPieza(String color, String tipo, String posicion) {
+    // Método para agregar una pieza al tablero
+    private void agregarPieza(Tablero.Color color, Tablero.TipoPieza tipo, int cantidad, Random random) {
+        for (int i = 0; i < cantidad; i++) {
+            String posicion = generarPosicionAleatoria(random);
+            Pieza pieza = crearPieza(color, tipo, posicion);
+            tablero.colocarPieza(pieza, generarPosicionAleatoria(random));
+            //agregar pieza adicional
+            Tablero.TipoPieza tipoAleatorio = obtenerTipoPiezaAleatorio(random);
+            String posicionAleatoria = generarPosicionAleatoria(random);
+            Pieza piezaAleatoria = crearPieza(color, tipoAleatorio, posicionAleatoria);
+            tablero.colocarPieza(piezaAleatoria, generarPosicionAleatoria(random));
+        }
+    }
+
+    private Tablero.TipoPieza obtenerTipoPiezaAleatorio(Random random) {
+        Tablero.TipoPieza[] tipos = Tablero.TipoPieza.values();
+        return tipos[random.nextInt(tipos.length)];
+    }
+
+    private String generarPosicionAleatoria(Random random) {
+        String posicion;
+        do {
+            int fila = random.nextInt(8);
+            int columna = random.nextInt(8);
+            posicion = (char) ('a' + columna) + String.valueOf(8 - fila);
+        } while (tablero.obtenerPiezaEnPosicion(posicion) != null); // Verificar que la posición no esté ocupada
+        return posicion;
+    }
+
+    // Método para crear una pieza según el tipo
+    private Pieza crearPieza(Tablero.Color color, Tablero.TipoPieza tipo, String posicion) {
         return switch (tipo) {
-            case "Rey" -> new Rey(color, posicion);
-            case "Reina" -> new Reina(color, posicion);
-            case "Torre" -> new Torre(color, posicion);
-            case "Alfil" -> new Alfil(color, posicion);
-            case "Caballo" -> new Caballo(color, posicion);
-            case "Peón" -> new Peon(color, posicion);
-            default -> throw new IllegalArgumentException("Tipo de pieza no válido.");
+            case Rey -> new Rey(color, posicion);
+            case Reina -> new Reina(color, posicion);
+            case Torre -> new Torre(color, posicion);
+            case Alfil -> new Alfil(color, posicion);
+            case Caballo -> new Caballo(color, posicion);
+            case Peon -> new Peon(color, posicion);
         };
     }
 
-    // Método para colocar una pieza en una posición válida
-    private void colocarPiezaEnPosicionValida(Pieza pieza, Random random) {
-        String posicion;
-        do {
-            posicion = generarPosicionAleatoria(random);
-        } while (!Validador.esPosicionValida(posicion) || estaPosicionOcupada(posicion));
-
-        pieza.setPosicion(posicion);
-        int fila = 8 - Integer.parseInt(posicion.substring(1));
-        int columna = posicion.charAt(0) - 'a';
-        tablero.getCasillas()[fila][columna] = pieza;
-    }
-
-    // Método para verificar si una posición está ocupada
-    private boolean estaPosicionOcupada(String posicion) {
-        int fila = 8 - Integer.parseInt(posicion.substring(1));
-        int columna = posicion.charAt(0) - 'a';
-        return tablero.getCasillas()[fila][columna] != null;
-    }
-
-    // Método para generar una posición aleatoria
-    private String generarPosicionAleatoria(Random random) {
-        int fila = random.nextInt(8);
-        int columna = random.nextInt(8);
-        return (char) ('a' + columna) + String.valueOf(8 - fila);
-    }
-
     // Método para inicializar todas las piezas
-    private void inicializarPiezas(String color, Random random) {
-        agregarPieza(color, "Rey", 1, random);
-        agregarPieza(color, "Reina", 1, random);
-        agregarPieza(color, "Torre", 2, random);
-        agregarPieza(color, "Alfil", 2, random);
-        agregarPieza(color, "Caballo", 2, random);
-        agregarPieza(color, "Peón", 8, random);
+    private void inicializarPiezas(Tablero.Color color, Random random) {
+        agregarPieza(color, Tablero.TipoPieza.Rey, 1, random);
+        agregarPieza(color, Tablero.TipoPieza.Reina, 1, random);
+        agregarPieza(color, Tablero.TipoPieza.Torre, 2, random);
+        agregarPieza(color, Tablero.TipoPieza.Alfil, 2, random);
+        agregarPieza(color, Tablero.TipoPieza.Caballo, 2, random);
+        agregarPieza(color, Tablero.TipoPieza.Peon, 8, random);
     }
 
+    // Método para seleccionar un algoritmo de ordenamiento
     private void seleccionarAlgoritmo(Scanner scanner) {
         try {
             System.out.println("Seleccione el algoritmo de ordenamiento:");
@@ -329,36 +269,18 @@ public class ChessSimulator {
             System.out.println("5. Quick Sort");
             System.out.println("6. Shell Sort");
 
-
             int opcionAlgoritmo = scanner.nextInt();
-            AlgoritmoOrdenamiento algoritmo = null;
+            AlgoritmoOrdenamiento algoritmo = switch (opcionAlgoritmo) {
+                case 1 -> new BubbleSort();
+                case 2 -> new SelectionSort();
+                case 3 -> new InsertionSort();
+                case 4 -> new MergeSort();
+                case 5 -> new QuickSort();
+                case 6 -> new ShellSort();
+                default -> throw new IllegalArgumentException("Opción no válida.");
+            };
 
-            // Seleccionar algoritmo
-            switch (opcionAlgoritmo) {
-                case 1:
-                    algoritmo = new BubbleSort();
-                    break;
-                case 2:
-                    algoritmo = new SelectionSort();
-                    break;
-                case 3:
-                    algoritmo = new InsertionSort();
-                    break;
-                case 4:
-                    algoritmo = new MergeSort();
-                    break;
-                case 5:
-                    algoritmo = new QuickSort();
-                    break;
-                case 6:
-                    algoritmo = new ShellSort();
-                    break;
-                default:
-                    System.out.println("Opción no válida.");
-            }
-            //Ejecución del algoritmo
-            algoritmo.ordenar(piezas, tablero);
-            //Visualizar el tablero ordenado
+            algoritmo.ordenar(tablero.getPiezas(), tablero);
             tablero.visualizarTablero();
         } catch (InputMismatchException e) {
             System.out.println("Error: Por favor, ingrese un número entero.");

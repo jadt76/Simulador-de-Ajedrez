@@ -90,17 +90,12 @@ public class QuickSort implements AlgoritmoOrdenamiento {
 
     private static void actualizarTablero(Pieza[] arrayPiezas, Tablero tablero) {
         // Limpiar el tablero
-        for (int fila = 0; fila < 8; fila++) {
-            for (int columna = 0; columna < 8; columna++) {
-                tablero.getCasillas()[fila][columna] = null;
-            }
-        }
+        tablero.getCasillas().clear();
 
         // Colocar las piezas en el tablero según su posición actual
         for (Pieza pieza : arrayPiezas) {
-            int fila = 8 - Integer.parseInt(pieza.getPosicion().substring(1));
-            int columna = pieza.getPosicion().charAt(0) - 'a';
-            tablero.getCasillas()[fila][columna] = pieza;
+            String posicion = pieza.getPosicion();
+            tablero.getCasillas().put(posicion, pieza);
         }
     }
 }
